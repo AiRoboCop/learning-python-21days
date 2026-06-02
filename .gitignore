@@ -1,0 +1,10 @@
+# 가상환경 (각 PC에서 새로 생성)
+.venv/
+
+# Python 캐시 파일
+__pycache__/
+*.pyc
+
+# OS 생성 파일
+Thumbs.db
+.DS_Store
