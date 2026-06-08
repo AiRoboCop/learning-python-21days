@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>김윤종의 21일 모던 개발자 여정</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0e16;
+    --bg-2: #0d1320;
+    --surface: #131a28;
+    --surface-2: #1a2333;
+    --border: #283449;
+    --border-bright: #3a4a66;
+    --text: #e6edf6;
+    --text-dim: #9aa7bd;
+    --text-faint: #5e6c84;
+
+    --done: #34d399;
+    --done-dim: #0f3d31;
+    --active: #fbbf24;
+    --active-dim: #4a3a0d;
+    --soon: #5e6c84;
+
+    --py: #4d9fff;
+    --cli: #34d399;
+    --code: #c084fc;
+    --git: #fb923c;
+    --senior: #f472b6;
+
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --sans: 'IBM Plex Sans KR', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(77, 159, 255, 0.10), transparent),
+      radial-gradient(ellipse 60% 50% at 90% 20%, rgba(192, 132, 252, 0.06), transparent),
+      radial-gradient(ellipse 50% 40% at 10% 60%, rgba(52, 211, 153, 0.05), transparent);
+    background-attachment: fixed;
+  }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Header ---------- */
+  header {
+    padding: 72px 0 48px;
+    position: relative;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--py);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 28px; height: 1px;
+    background: var(--py);
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  h1 .accent {
+    background: linear-gradient(120deg, var(--py), var(--code));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .subtitle {
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    max-width: 600px;
+    margin-bottom: 40px;
+  }
+  .subtitle code {
+    font-family: var(--mono);
+    font-size: 0.92em;
+    color: var(--cli);
+    background: var(--surface);
+    padding: 1px 7px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+  }
+
+  /* ---------- Progress hero ---------- */
+  .hero-progress {
+    background: linear-gradient(145deg, var(--surface), var(--bg-2));
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px 30px;
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-progress::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--done), transparent);
+  }
+  .hp-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .hp-label {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+  .hp-pct {
+    font-family: var(--mono);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--done);
+  }
+  .hp-pct .of { color: var(--text-faint); font-size: 1rem; font-weight: 400; }
+  .bar-track {
+    height: 12px;
+    background: var(--bg);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    width: 0;
+    border-radius: 20px;
+    background: linear-gradient(90deg, var(--done), #6ee7b7);
+    transition: width 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+  }
+  .bar-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    animation: shimmer 2.5s infinite;
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
+  .bar-ticks {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--text-faint);
+  }
+
+  /* ---------- Stat cards ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    transition: transform 0.25s, border-color 0.25s;
+  }
+  .stat:hover { transform: translateY(-3px); border-color: var(--border-bright); }
+  .stat .num {
+    font-family: var(--mono);
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat .lbl { font-size: 0.85rem; color: var(--text-dim); }
+  .stat.c1 .num { color: var(--done); }
+  .stat.c2 .num { color: var(--active); }
+  .stat.c3 .num { color: var(--py); }
+  .stat.c4 .num { color: var(--git); }
+
+  /* ---------- Section ---------- */
+  section { padding: 44px 0; }
+  .sec-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .sec-head .ix {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--text-faint);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 9px;
+  }
+  .sec-head h2 {
+    font-size: 1.55rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .sec-head .line {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ---------- Track cards ---------- */
+  .tracks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
+  }
+  .track {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s, border-color 0.25s;
+  }
+  .track:hover { transform: translateY(-4px); }
+  .track::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 3px;
+    background: var(--tc);
+  }
+  .track .ico { font-size: 1.8rem; margin-bottom: 12px; display: block; }
+  .track h3 { font-size: 1.08rem; font-weight: 600; margin-bottom: 6px; }
+  .track .tag {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--tc);
+    border: 1px solid var(--tc);
+    border-radius: 20px;
+    padding: 2px 10px;
+    display: inline-block;
+    margin-bottom: 12px;
+    opacity: 0.9;
+  }
+  .track p { font-size: 0.88rem; color: var(--text-dim); }
+  .track.py { --tc: var(--py); }
+  .track.cli { --tc: var(--cli); }
+  .track.code { --tc: var(--code); }
+  .track.git { --tc: var(--git); }
+  .track.senior { --tc: var(--senior); }
+  .track.py:hover { border-color: var(--py); }
+  .track.cli:hover { border-color: var(--cli); }
+  .track.code:hover { border-color: var(--code); }
+  .track.git:hover { border-color: var(--git); }
+  .track.senior:hover { border-color: var(--senior); }
+
+  /* ---------- Week label ---------- */
+  .week-label {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin: 28px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.05em;
+  }
+  .week-label span {
+    color: var(--text-faint);
+    font-size: 0.72rem;
+  }
+  .week-label::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: var(--border);
+  }
+
+  /* ---------- Day grid ---------- */
+  .days {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 14px;
+  }
+  .day {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.2s;
+  }
+  .day-head {
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+  }
+  .day-head:hover { background: var(--surface-2); }
+  .day-badge {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.8rem;
+    min-width: 46px; height: 46px;
+    border-radius: 11px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 1;
+    gap: 2px;
+  }
+  .day-badge .d { font-size: 0.62rem; opacity: 0.7; }
+  .day-info { flex: 1; min-width: 0; }
+  .day-title { font-size: 0.98rem; font-weight: 600; margin-bottom: 2px; }
+  .day-sub { font-size: 0.78rem; color: var(--text-dim); }
+  .day-status {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    padding: 3px 9px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    letter-spacing: 0.03em;
+  }
+  .chevron {
+    color: var(--text-faint);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+  }
+  .day.open .chevron { transform: rotate(180deg); }
+
+  /* status variants */
+  .day.done { border-color: var(--done-dim); }
+  .day.done .day-badge { background: var(--done-dim); color: var(--done); border: 1px solid var(--done); }
+  .day.done .day-status { background: var(--done-dim); color: var(--done); }
+  .day.done:hover { border-color: var(--done); }
+
+  .day.active { border-color: var(--active); box-shadow: 0 0 0 1px var(--active), 0 0 24px rgba(251,191,36,0.12); }
+  .day.active .day-badge { background: var(--active-dim); color: var(--active); border: 1px solid var(--active); animation: pulse 2s infinite; }
+  .day.active .day-status { background: var(--active-dim); color: var(--active); }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(251,191,36,0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(251,191,36,0); }
+  }
+
+  .day.soon { opacity: 0.72; }
+  .day.soon .day-badge { background: var(--bg); color: var(--soon); border: 1px solid var(--border); }
+  .day.soon .day-status { background: var(--bg); color: var(--soon); border: 1px solid var(--border); }
+  .day.soon:hover { opacity: 1; border-color: var(--border-bright); }
+
+  /* day body */
+  .day-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  .day.open .day-body { max-height: 900px; }
+  .day-body-inner {
+    padding: 4px 18px 20px;
+    border-top: 1px solid var(--border);
+    margin-top: 0;
+  }
+  .topic-group { margin-top: 16px; }
+  .topic-group .tg-head {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    padding: 3px 9px;
+    border-radius: 7px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+  .deliverable {
+    margin-top: 16px;
+    padding: 12px 14px;
+    background: var(--bg);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  .deliverable .dl-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--active);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .soon-note {
+    margin-top: 14px;
+    font-size: 0.85rem;
+    color: var(--text-faint);
+    font-style: italic;
+  }
+
+  /* ---------- Milestones ---------- */
+  .milestones {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px 30px;
+  }
+  .ms-hint {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ms-list { display: grid; gap: 10px; }
+  .ms-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .ms-item:hover { border-color: var(--border-bright); }
+  .ms-check {
+    width: 22px; height: 22px;
+    border-radius: 7px;
+    border: 2px solid var(--border-bright);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 0.8rem;
+    color: var(--bg);
+  }
+  .ms-item.checked .ms-check {
+    background: var(--done);
+    border-color: var(--done);
+  }
+  .ms-item.checked .ms-check::after { content: '✓'; font-weight: 700; }
+  .ms-text { font-size: 0.92rem; flex: 1; transition: color 0.2s; }
+  .ms-item.checked .ms-text { color: var(--text-faint); text-decoration: line-through; }
+  .ms-phase {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text-faint);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+  .ms-progress {
+    margin-top: 20px;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    text-align: right;
+  }
+  .ms-progress b { color: var(--done); }
+
+  /* ---------- Footer ---------- */
+  footer {
+    padding: 56px 0 72px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    margin-top: 32px;
+  }
+  .quote {
+    font-size: 1.15rem;
+    color: var(--text);
+    max-width: 580px;
+    margin: 0 auto 14px;
+    line-height: 1.6;
+  }
+  .quote .q-mark { color: var(--py); font-family: var(--mono); }
+  .quote-by {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--text-faint);
+  }
+  .footer-meta {
+    margin-top: 28px;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--text-faint);
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .footer-meta span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--done); display: inline-block; }
+
+  /* reveal animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 560px) {
+    header { padding: 48px 0 32px; }
+    .hero-progress, .milestones { padding: 22px 18px; }
+    .days { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="eyebrow">Learning Journey · since 2026.05.26</div>
+  <h1>김윤종의 <span class="accent">21일 모던 개발자</span> 여정</h1>
+  <p class="subtitle">
+    Classic ASP 23년 경력 위에 모던 개발의 새 층을 쌓는 21일.
+    <code>Python</code> · <code>CLI</code> · <code>VS Code</code> · <code>Git</code> 을 한 번에.
+    목표는 <code>MS SQL → Excel</code> GUI 도구를 혼자 만드는 개발자.
+  </p>
+
+  <div class="hero-progress reveal">
+    <div class="hp-top">
+      <span class="hp-label">// 전체 진척도 — Week 1 진행 중</span>
+      <span class="hp-pct"><span id="progNum">0</span><span class="of"> / 21 일</span></span>
+    </div>
+    <div class="bar-track">
+      <div class="bar-fill" id="barFill"></div>
+    </div>
+    <div class="bar-ticks">
+      <span>Day 1</span><span>Week 1</span><span>Week 2</span><span>Week 3</span><span>Day 21 🎯</span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat c1 reveal"><div class="num">3</div><div class="lbl">완료한 Day</div></div>
+    <div class="stat c2 reveal"><div class="num">Day 4</div><div class="lbl">진행 중</div></div>
+    <div class="stat c3 reveal"><div class="num">20+</div><div class="lbl">작성한 코드 파일</div></div>
+    <div class="stat c4 reveal"><div class="num">1</div><div class="lbl">첫 Git 커밋 ✓</div></div>
+  </div>
+</header>
+
+<!-- ============ TRACKS ============ -->
+<section class="wrap">
+  <div class="sec-head">
+    <span class="ix">01</span>
+    <h2>학습 카테고리 · 5개 트랙</h2>
+    <span class="line"></span>
+  </div>
+  <p style="color:var(--text-dim); margin:-12px 0 24px; font-size:0.92rem;">
+    한 가지만 깊게 파는 게 아니라, 실제 개발자의 하루처럼 5개 트랙이 매일 조금씩 함께 흐릅니다.
+  </p>
+  <div class="tracks">
+    <div class="track py reveal">
+      <span class="ico">🐍</span>
+      <span class="tag">Day 1~ 매일</span>
+      <h3>Python</h3>
+      <p>언어의 핵심. 변수·함수·클래스부터 GUI·DB까지. 21일의 중심 축.</p>
+    </div>
+    <div class="track cli reveal">
+      <span class="ico">💻</span>
+      <span class="tag">Day 1~ 매일</span>
+      <h3>CLI / Shell</h3>
+      <p>PowerShell 7. 마우스 100번 대신 명령어 한 줄. 개발자의 손발.</p>
+    </div>
+    <div class="track code reveal">
+      <span class="ico">🔧</span>
+      <span class="tag">Day 1~ 매일</span>
+      <h3>VS Code</h3>
+      <p>단축키·디버거·확장. 도구를 길들이는 자가 시니어가 된다.</p>
+    </div>
+    <div class="track git reveal">
+      <span class="ico">🔀</span>
+      <span class="tag">Day 3~</span>
+      <h3>Git / GitHub</h3>
+      <p>코드의 타임머신. 커밋·브랜치·PR·릴리스까지 실무 워크플로우.</p>
+    </div>
+    <div class="track senior reveal">
+      <span class="ico">🌟</span>
+      <span class="tag">매일 조금씩</span>
+      <h3>시니어 마인드</h3>
+      <p>SRP·DRY·순수 함수·타입 힌트. "왜 그렇게 짰는가"를 설명하는 능력.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ROADMAP ============ -->
+<section class="wrap">
+  <div class="sec-head">
+    <span class="ix">02</span>
+    <h2>21일 로드맵 · 클릭해서 펼치기</h2>
+    <span class="line"></span>
+  </div>
+
+  <!-- WEEK 1 -->
+  <div class="week-label">WEEK 1 — Python 기초 + 개발 환경 마스터 <span>Day 1–7</span></div>
+  <div class="days" id="week1"></div>
+
+  <!-- WEEK 2 -->
+  <div class="week-label">WEEK 2 — 객체지향 + GUI + 비동기 + DB <span>Day 8–14</span></div>
+  <div class="days" id="week2"></div>
+
+  <!-- WEEK 3 -->
+  <div class="week-label">WEEK 3 — 시니어 마인드 + 최종 프로젝트 <span>Day 15–21</span></div>
+  <div class="days" id="week3"></div>
+</section>
+
+<!-- ============ MILESTONES ============ -->
+<section class="wrap">
+  <div class="sec-head">
+    <span class="ix">03</span>
+    <h2>마일스톤 체크리스트</h2>
+    <span class="line"></span>
+  </div>
+  <div class="milestones reveal">
+    <p class="ms-hint">✨ 클릭하면 체크됩니다. (다운로드해서 브라우저로 열면 진행 상황이 저장돼요)</p>
+    <div class="ms-list" id="msList"></div>
+    <div class="ms-progress">달성: <b id="msDone">0</b> / <span id="msTotal">0</span></div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="wrap">
+  <p class="quote">
+    <span class="q-mark">"</span>코드는 작성되는 횟수보다 읽히는 횟수가 훨씬 많다.<span class="q-mark">"</span>
+  </p>
+  <p class="quote-by">— Guido van Rossum, Python 창시자</p>
+  <div class="footer-meta">
+    <span><span class="dot"></span> 부산 · 김윤종</span>
+    <span>🎯 목표: 2026년 모던 AI 개발자</span>
+    <span>📅 완주 예정: Day 21</span>
+  </div>
+</footer>
+
+<script>
+// ========== DATA ==========
+const days = [
+  // WEEK 1
+  { n:1, status:'done', title:'환경 구축 + 변수 + 입출력', sub:'Python 첫걸음 + 개발 환경',
+    topics:[
+      {h:'🐍 Python', items:['변수','str/int/float/bool','input()','int()','type()','f-string','def 함수','타입 힌트','메인 가드']},
+      {h:'💻 CLI', items:['pwd','cd','mkdir','ls','code .','python -m venv','activate','pip list']},
+      {h:'🔧 VS Code', items:['Command Palette','확장 설치','인터프리터 선택']},
+      {h:'🌟 시니어', items:['가상환경 생활화','단일 책임(SRP)','DRY','순수 함수','변수명 규칙']},
+    ], deliverable:'BMI 계산기 (v1.0 → v1.4 4단계 리팩토링)', week:1 },
+
+  { n:2, status:'done', title:'자료형 + 조건문', sub:'프로그램에 갈림길 만들기',
+    topics:[
+      {h:'🐍 Python', items:['bool','Truthy/Falsy','비교 연산자 6종','체이닝 20<=x<30','and/or/not','단락 평가','if/elif/else','for','range']},
+      {h:'💻 CLI', items:['cp','mv','rm','cat','New-Item','rm 안전장치 -WhatIf']},
+      {h:'🌟 시니어', items:['순서 함정','긍정형 조건','i18n(한국어 조사)']},
+    ], deliverable:'BMI 등급 메시지 (조건문 응용) + AI시대·언어선택 토론', week:1 },
+
+  { n:3, status:'done', title:'반복문 + 첫 게임 + Git 입문', sub:'while · break · 그리고 첫 커밋',
+    topics:[
+      {h:'🐍 Python', items:['while','break','continue','import','random.randint','while True+break']},
+      {h:'🔀 Git', items:['git init','add','commit','status','log','config','.gitignore','branch -m main']},
+      {h:'💻 CLI', items:['ls -Force','파이프 |','리다이렉션 >']},
+      {h:'🌟 시니어', items:['죽은 코드(dead code)','검증하는 습관']},
+    ], deliverable:'🎮 숫자 맞추기 게임 + ⭐ 인생 첫 Git 커밋', week:1 },
+
+  { n:4, status:'active', title:'함수 심화 + 모듈 + GitHub', sub:'코드를 나눠 담고, 세상에 공개',
+    topics:[
+      {h:'🐍 Python', items:['매개변수 심화','기본값/키워드 인자','스코프(지역/전역)','모듈 만들기','import 응용']},
+      {h:'🔀 GitHub', items:['계정','원격 저장소','git push','README']},
+      {h:'💻 CLI', items:['파이프 |','리다이렉션 > >>']},
+    ], deliverable:'계산기 모듈 + GitHub 첫 레포 (다른 PC 작업 가능!)', week:1 },
+
+  { n:5, status:'soon', title:'리스트·딕셔너리·튜플·세트 + 파일 I/O', sub:'자료구조 + VS Code 디버거', week:1 },
+  { n:6, status:'soon', title:'예외 처리 + Git 브랜치', sub:'try/except + branch/merge', week:1 },
+  { n:7, status:'soon', title:'클래스 기초 (OOP 1) + 첫 PR', sub:'미니 프로젝트: 콘솔 가계부', week:1 },
+
+  // WEEK 2
+  { n:8, status:'soon', title:'상속·다형성 (OOP 2) + JSON', sub:'코드 포맷터 Black/Ruff', week:2 },
+  { n:9, status:'soon', title:'tkinter 기초', sub:'Label·Button·Entry + 커밋 컨벤션', week:2 },
+  { n:10, status:'soon', title:'레이아웃 (pack/grid/Frame)', sub:'로그인 화면 + 워크스페이스 설정', week:2 },
+  { n:11, status:'soon', title:'이벤트·콜백·lambda', sub:'계산기 GUI + 디버거 심화', week:2 },
+  { n:12, status:'soon', title:'ttk·Treeview·Notebook', sub:'탭 기반 도구 + 스니펫', week:2 },
+  { n:13, status:'soon', title:'threading + UI 비동기', sub:'다운로더 + GitLens', week:2 },
+  { n:14, status:'soon', title:'SQL 기초 + sqlite3', sub:'Todo DB + GitHub Issues', week:2 },
+
+  // WEEK 3
+  { n:15, status:'soon', title:'pyodbc + MS SQL 연결', sub:'실제 DB 조회 GUI ⭐', week:3 },
+  { n:16, status:'soon', title:'openpyxl Excel 생성', sub:'DB→Excel 기본형 + PR 활용', week:3 },
+  { n:17, status:'soon', title:'🌟 모듈 분리 + 타입 힌트', sub:'리팩토링 + VS Code 리팩토링 기능', week:3 },
+  { n:18, status:'soon', title:'🌟 로깅 + 예외 설계', sub:'견고한 처리기 + GitHub Actions', week:3 },
+  { n:19, status:'soon', title:'🌟 pytest 단위 테스트', sub:'테스트 코드 + CI 통과', week:3 },
+  { n:20, status:'soon', title:'PyInstaller 패키징 + 설계', sub:'EXE 빌드 + 최종 프로젝트 설계', week:3 },
+  { n:21, status:'soon', title:'최종 프로젝트 완성 + 회고', sub:'나만의 GUI 앱 EXE + v1.0.0 Release 🎉', week:3 },
+];
+
+const milestones = [
+  { t:'개발 환경 구축 (Python · VS Code · Git)', p:'Day 1', done:true },
+  { t:'첫 Python 코드 실행 (Hello, Python!)', p:'Day 1', done:true },
+  { t:'가상환경(.venv) 생활화', p:'Day 1', done:true },
+  { t:'함수 + 타입 힌트 직접 작성', p:'Day 1', done:true },
+  { t:'조건문 3종 마스터 (if/elif/else)', p:'Day 2', done:true },
+  { t:'반복문 마스터 (for · while)', p:'Day 2–3', done:true },
+  { t:'첫 게임 제작 (숫자 맞추기)', p:'Day 3', done:true },
+  { t:'인생 첫 Git 커밋', p:'Day 3', done:true },
+  { t:'GitHub에 코드 공개 (push)', p:'Day 4', done:false },
+  { t:'클래스(OOP) 이해', p:'Day 5–7', done:false },
+  { t:'첫 GUI 프로그램 (tkinter)', p:'Day 8–11', done:false },
+  { t:'MS SQL DB 연결', p:'Day 14–15', done:false },
+  { t:'DB → Excel 도구 완성', p:'Day 16', done:false },
+  { t:'최종 프로젝트 EXE 빌드', p:'Day 20–21', done:false },
+  { t:'GitHub v1.0.0 릴리스 🎉', p:'Day 21', done:false },
+];
+
+// ========== RENDER DAYS ==========
+const statusLabel = { done:'완료', active:'진행중', soon:'예정' };
+function renderDays() {
+  [1,2,3].forEach(wk => {
+    const container = document.getElementById('week'+wk);
+    days.filter(d => d.week === wk).forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'day ' + d.status;
+      let body = '';
+      if (d.topics) {
+        d.topics.forEach(tg => {
+          body += `<div class="topic-group"><div class="tg-head">${tg.h}</div><div class="chips">` +
+            tg.items.map(i => `<span class="chip">${i}</span>`).join('') + `</div></div>`;
+        });
+        if (d.deliverable) {
+          body += `<div class="deliverable"><span class="dl-label">// 산출물</span>${d.deliverable}</div>`;
+        }
+      } else {
+        body = `<div class="soon-note">곧 만나요. 차근차근 한 걸음씩. 🌱</div>`;
+      }
+      el.innerHTML = `
+        <div class="day-head">
+          <div class="day-badge"><span class="d">DAY</span>${d.n}</div>
+          <div class="day-info">
+            <div class="day-title">${d.title}</div>
+            <div class="day-sub">${d.sub}</div>
+          </div>
+          <span class="day-status">${statusLabel[d.status]}</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="day-body"><div class="day-body-inner">${body}</div></div>`;
+      el.querySelector('.day-head').addEventListener('click', () => el.classList.toggle('open'));
+      container.appendChild(el);
+    });
+  });
+  // auto-open the active day
+  const activeEl = document.querySelector('.day.active');
+  if (activeEl) setTimeout(() => activeEl.classList.add('open'), 800);
+}
+
+// ========== RENDER MILESTONES ==========
+const STORE_KEY = 'yj_milestones_v1';
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return null;
+}
+function saveState(state) {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+function renderMilestones() {
+  const saved = loadState();
+  const list = document.getElementById('msList');
+  milestones.forEach((m, i) => {
+    if (saved && typeof saved[i] === 'boolean') m.done = saved[i];
+    const item = document.createElement('div');
+    item.className = 'ms-item' + (m.done ? ' checked' : '');
+    item.innerHTML = `<div class="ms-check"></div><div class="ms-text">${m.t}</div><span class="ms-phase">${m.p}</span>`;
+    item.addEventListener('click', () => {
+      m.done = !m.done;
+      item.classList.toggle('checked');
+      saveState(milestones.map(x => x.done));
+      updateMsCount();
+    });
+    list.appendChild(item);
+  });
+  updateMsCount();
+}
+function updateMsCount() {
+  const done = milestones.filter(m => m.done).length;
+  document.getElementById('msDone').textContent = done;
+  document.getElementById('msTotal').textContent = milestones.length;
+}
+
+// ========== PROGRESS ANIMATION ==========
+function animateProgress() {
+  const doneCount = 3; // completed days
+  const total = 21;
+  const pct = (doneCount / total) * 100;
+  setTimeout(() => {
+    document.getElementById('barFill').style.width = pct + '%';
+  }, 300);
+  // count up
+  let cur = 0;
+  const target = doneCount;
+  const tick = setInterval(() => {
+    cur++;
+    document.getElementById('progNum').textContent = cur;
+    if (cur >= target) clearInterval(tick);
+  }, 180);
+}
+
+// ========== REVEAL ON SCROLL ==========
+function setupReveal() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i % 5 * 0.07) + 's';
+    obs.observe(el);
+  });
+}
+
+// ========== INIT ==========
+renderDays();
+renderMilestones();
+animateProgress();
+setupReveal();
+</script>
+</body>
+</html>

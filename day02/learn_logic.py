@@ -6,15 +6,15 @@ print("안전한 나눗셈")
 
 x = 0
 result = x != 0 and 1/x > 0.5
-print(f"x = {x}, 안전검사:{result}")
+print(f"x = {x}, 안전검사 1:{result}")
 
 x = 4
 result = x != 0 and 1/x > 0.5
-print(f"x = {x}, 안전검사:{result}")
+print(f"x = {x}, 안전검사 2:{result}")
 
 x = 1
 result = x != 0 and 1/x > 0.5
-print(f"x = {x}, 안전검사:{result}")
+print(f"x = {x}, 안전검사 3:{result}")
 
 
 age = 19
