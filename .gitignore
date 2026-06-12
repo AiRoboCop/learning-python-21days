@@ -10,4 +10,4 @@ Thumbs.db
 .DS_Store
 
 # 테스트 용 텍스트 파일
-*.txt
+# *.txt
