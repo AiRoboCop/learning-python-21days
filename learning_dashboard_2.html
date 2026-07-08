@@ -569,10 +569,10 @@
   </div>
 
   <div class="stats">
-    <div class="stat c1 reveal"><div class="num">7</div><div class="lbl">완료한 Day</div></div>
-    <div class="stat c2 reveal"><div class="num">Day 8</div><div class="lbl">다음 차례</div></div>
-    <div class="stat c3 reveal"><div class="num">40+</div><div class="lbl">작성한 코드 파일</div></div>
-    <div class="stat c4 reveal"><div class="num">🎉</div><div class="lbl">Week 1 완주!</div></div>
+    <div class="stat c1 reveal"><div class="num">8</div><div class="lbl">완료한 Day</div></div>
+    <div class="stat c2 reveal"><div class="num">Day 9</div><div class="lbl">다음 차례</div></div>
+    <div class="stat c3 reveal"><div class="num">50+</div><div class="lbl">작성한 코드 파일</div></div>
+    <div class="stat c4 reveal"><div class="num">🧬</div><div class="lbl">상속·다형성 ✓</div></div>
   </div>
 </header>
 
@@ -726,7 +726,13 @@ const days = [
     ], deliverable:'콘솔 가계부 앱(OOP) + 첫 Pull Request → 🎉 Week 1 완주!', week:1 },
 
   // WEEK 2
-  { n:8, status:'soon', title:'상속·다형성 (OOP 2) + JSON', sub:'코드 포맷터 Black/Ruff', week:2 },
+  { n:8, status:'done', title:'상속·다형성(OOP 2) + JSON', sub:'객체 관계 + 데이터 저장',
+    topics:[
+      {h:'🐍 OOP 2', items:['상속','오버라이딩','super()','다형성','다단계/다중상속']},
+      {h:'💾 JSON', items:['json.dump/load','dict↔JSON','파일I/O 비교','영속성','ensure_ascii']},
+      {h:'🎨 코드 포매터', items:['Black(모양)','Ruff(문제)','pip install','Format on Save','VS Code 통합']},
+      {h:'🌟 시니어', items:['is-a 관계','생성자 상속','확장에 열린 코드','도구는 하나씩']},
+    ], deliverable:'OOP 2 완성(상속~다형성) + JSON 저장/불러오기 + 자동 포매팅 환경 → C1·C2 강화', week:2 },
   { n:9, status:'soon', title:'tkinter 기초', sub:'Label·Button·Entry + 커밋 컨벤션', week:2 },
   { n:10, status:'soon', title:'레이아웃 (pack/grid/Frame)', sub:'로그인 화면 + 워크스페이스 설정', week:2 },
   { n:11, status:'soon', title:'이벤트·콜백·lambda', sub:'계산기 GUI + 디버거 심화', week:2 },
@@ -840,7 +846,7 @@ function updateMsCount() {
 
 // ========== PROGRESS ANIMATION ==========
 function animateProgress() {
-  const doneCount = 7; // completed days
+  const doneCount = 8; // completed days
   const total = 21;
   const pct = (doneCount / total) * 100;
   setTimeout(() => {
