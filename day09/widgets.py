@@ -22,14 +22,15 @@ button.pack()
 entry = tk.Entry(root)
 entry.pack()
 
-name = entry.get()
+# name = entry.get()
 
 
 def say_hello():
     print("버튼이 눌렸어요!")
+    print(entry.get())
 
 
-button = tk.Button(root, text="클릭", command=say_hello)
-button.pack()
+button2 = tk.Button(root, text="클릭", command=say_hello)
+button2.pack()
 
 root.mainloop()
